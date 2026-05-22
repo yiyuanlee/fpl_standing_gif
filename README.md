@@ -100,11 +100,40 @@ python generate_gif.py
 
 ---
 
-### Customization / 自定义修改
+### CLI Usage & Customization / 命令行用法与自定义
 
-You can change the target mini-league ID in the scripts. In both `generate_video.py` and `generate_gif.py`, update the `league_url`:
+The project features a unified visualizer command-line tool `fpl_visualizer.py`. You can configure it dynamically via CLI arguments without editing Python files:
 
-您可以在脚本中修改目标迷你联赛 ID。在 `generate_video.py` 和 `generate_gif.py` 中更新 `league_url`：
-```python
-league_url = "https://fantasy.premierleague.com/api/leagues-classic/<YOUR_LEAGUE_ID>/standings/"
+项目现在包含了一个统一的命令行可视化工具 `fpl_visualizer.py`。您可以通过命令行参数动态配置它，而不需要手动修改代码文件：
+
+```bash
+# Generate MP4 for a specific league ID (e.g. 258110) showing top 5 players
+# 为指定的联赛 ID 生成前 5 名选手的 MP4 视频
+python fpl_visualizer.py -l 258110 -t 5 -f mp4
+
+# Generate GIF for a specific league
+# 为指定的联赛生成 GIF 动图
+python fpl_visualizer.py -l 258110 -t 3 -f gif
 ```
+
+You can also pass these options directly to the original wrapper scripts, which will preserve their respective formats:
+
+您也可以直接把这些命令行参数传给原先的包装脚本：
+
+```bash
+# Generate MP4 with custom league ID and top 4 players
+python generate_video.py -l 258110 -t 4
+
+# Generate GIF with custom league ID and top 3 players
+python generate_gif.py -l 258110 -t 3
+```
+
+#### CLI Options / 参数说明:
+- `-l`, `--league-id` : FPL classic league ID (default: `258110`) / FPL 经典迷你联赛 ID
+- `-f`, `--format` : Output format: `mp4` or `gif` (default: `mp4`) / 输出格式
+- `-o`, `--output` : Custom output file path / 自定义输出路径
+- `-t`, `--top` : Number of top players to visualize (default: `3`) / 可视化排名前几名的选手
+- `-s`, `--subframes` : Number of interpolated frames between gameweeks (default: `8` for mp4, `1` for gif) / 两轮次之间的动画插值帧数
+- `--fps` : Animation frames per second (default: `24` for mp4, `7` for gif) / 每秒播放帧率
+- `--freeze` : Number of freeze frames at the end of the animation (default: `48` for mp4, `30` for gif) / 动画结束时的停顿帧数
+
